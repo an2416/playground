@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+from matplotlib import rc
 import streamlit as st
 from typing import List, Dict, Union
 from datetime import timedelta
@@ -25,6 +26,7 @@ else:
     font_path = 'fonts/NanumGothic.ttf'
     fontprop = fm.FontProperties(fname=font_path)
     plt.rcParams['font.family'] = fontprop.get_name()
+    rc('font', family=fontprop.get_name())
     print(f"Loaded font name: {fontprop.get_name()}")
 plt.rcParams['axes.unicode_minus'] = False
 
