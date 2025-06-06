@@ -19,12 +19,13 @@ contacts_logs = {
 }
 
 # 한글 폰트 설정 (맑은 고딕)
-font_path = 'NanumGothicEco.ttf'
 if sys.platform == "darwin":
     plt.rcParams['font.family'] = 'AppleGothic'
 else:
+    font_path = 'NanumGothicEco.ttf'
     fontprop = fm.FontProperties(fname=font_path)
     plt.rcParams['font.family'] = fontprop.get_name()
+    print(f"Loaded font name: {fontprop.get_name()}")
 plt.rcParams['axes.unicode_minus'] = False
 
 
