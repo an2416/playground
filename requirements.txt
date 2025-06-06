@@ -1,5 +1,5 @@
-matplotlib==3.9.4
-numpy==2.0.2
-pandas==2.3.0
-python-dateutil==2.9.0.post0
-streamlit==1.45.1
+matplotlib
+numpy
+pandas
+python-dateutil
+streamlit
