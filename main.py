@@ -173,6 +173,69 @@ def robust_contact_reminder(
 # Streamlit 앱 시작
 st.title("📅 연락 리마인더 시스템 (최종 완성본)")
 
+# 사용자 슬라이더로 sudden_change_threshold 설정 가능
+sudden_change_threshold = st.sidebar.slider("급격한 변화 판정 비율", min_value=0.1, max_value=0.5, value=0.2, step=0.05)
+
+# 사용자 입력 데이터 테스트 (항상 최상단에 표시)
+st.sidebar.header("📥 사용자 입력 데이터 테스트")
+user_input = st.sidebar.text_area(
+    "연락 날짜 입력 (YYYY-MM-DD 형식, 줄바꿈 구분)",
+    "2025-01-01\n2025-01-15\n2025-02-10\n2025-03-01"
+)
+
+if st.sidebar.button("결과 보기"):
+    try:
+        user_dates = [
+            pd.to_datetime(line.strip())
+            for line in user_input.strip().split("\n")
+            if line.strip() != ""
+        ]
+        user_dates = sorted(user_dates)
+
+        user_result = robust_contact_reminder("사용자 입력", user_dates, sudden_change_threshold=sudden_change_threshold)
+
+        st.subheader("📋 사용자 입력 결과")
+        df_user_result = pd.DataFrame([user_result])
+        display_columns = [
+            "Name", "Last Contact", "Next Expected", "Mean Interval",
+            "EMA Interval", "z-Score", "Confidence", "Confidence_raw", "Status"
+        ]
+        st.dataframe(df_user_result[display_columns])
+
+        st.markdown("### 사용자 입력 연락 날짜 도표")
+        dates_numeric = [(d - today).days for d in user_dates]
+        fig1, ax1 = plt.subplots(figsize=(8, 1))
+        ax1.scatter(dates_numeric, [1] * len(dates_numeric), marker='o', color='green')
+        ax1.set_yticks([])
+        if fontprop:
+            ax1.set_xlabel("오늘로부터 경과일", fontproperties=fontprop)
+            ax1.set_title(f"사용자 연락한 날짜", fontproperties=fontprop)
+        else:
+            ax1.set_xlabel("오늘로부터 경과일")
+            ax1.set_title(f"사용자 연락한 날짜")
+        st.pyplot(fig1)
+
+        if len(user_dates) > 1:
+            intervals = np.diff(user_dates).astype('timedelta64[D]').astype(int)
+            ema_history = user_result['EMA History']
+
+            fig2, ax2 = plt.subplots(figsize=(8, 3))
+            ax2.plot(range(1, len(intervals) + 1), intervals, marker='o', linestyle='-', label='Interval days')
+            ax2.plot(range(1, len(ema_history) + 1), ema_history, marker='x', linestyle='--', color='red', label='EMA')
+            if fontprop:
+                ax2.set_xlabel("연락 순서", fontproperties=fontprop)
+                ax2.set_ylabel("Interval days", fontproperties=fontprop)
+                ax2.set_title(f"사용자 연락 날짜 간 interval days + EMA", fontproperties=fontprop)
+            else:
+                ax2.set_xlabel("연락 순서")
+                ax2.set_ylabel("Interval days")
+                ax2.set_title(f"사용자 연락 날짜 간 interval days + EMA")
+            ax2.legend()
+            st.pyplot(fig2)
+
+    except Exception as e:
+        st.error(f"입력 데이터 파싱 중 오류 발생: {e}")
+
 # 기존 연락자 리마인더 결과
 reminder_results = []
 reminder_results_raw = {}
