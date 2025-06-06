@@ -30,17 +30,10 @@ contacts_logs = {
 # 한글 폰트 설정 (맑은 고딕)
 if sys.platform == "darwin":
     plt.rcParams['font.family'] = 'AppleGothic'
-else:
-    font_path = 'fonts/NanumGothic.otf'
-    fontprop = fm.FontProperties(fname=font_path)
-    plt.rcParams['font.family'] = fontprop.get_name()
-    print(f"Loaded font name: {fontprop.get_name()}")
-plt.rcParams['axes.unicode_minus'] = False
+    plt.rcParams['axes.unicode_minus'] = False
 
-font_list = [f.name for f in fm.fontManager.ttflist]
-print("설치된 폰트 목록:", font_list)
-
-
+font_path = 'fonts/NanumGothic.ttf'
+fontprop = fm.FontProperties(fname=font_path)
 
 # alpha 자동 계산 함수 (hybrid)
 def compute_dynamic_alpha(intervals: List[int]) -> float:
@@ -204,7 +197,7 @@ def robust_contact_reminder(
 
 
 # Streamlit 앱 시작
-st.title(f"📅 연락 리마인더 시스템 (EMA + 특수 이벤트 고려 + Adaptive Alpha + Confidence 개선) {font_list}")
+st.title(f"📅 연락 리마인더 시스템 (EMA + 특수 이벤트 고려 + Adaptive Alpha + Confidence 개선)")
 
 # 사용자 슬라이더로 sudden_change_threshold 설정 가능
 sudden_change_threshold = st.sidebar.slider("급격한 변화 판정 비율", min_value=0.1, max_value=0.5, value=0.2, step=0.05)
@@ -290,8 +283,12 @@ for name, history in contacts_logs.items():
     dates_numeric = [(d - today).days for d in history]
     ax1.scatter(dates_numeric, [1] * len(dates_numeric), marker='o', color='blue')
     ax1.set_yticks([])
-    ax1.set_xlabel("오늘로부터 경과일")
-    ax1.set_title(f"{name} 연락한 날짜")
+    if sys.platform == "darwin":
+        ax1.set_xlabel("오늘로부터 경과일")
+        ax1.set_title(f"{name} 연락한 날짜")
+    else:
+        ax1.set_xlabel("오늘로부터 경과일", fontproperties=fontprop)
+        ax1.set_title(f"{name} 연락한 날짜", fontproperties=fontprop)
     st.pyplot(fig1)
 
     if len(history) > 1:
