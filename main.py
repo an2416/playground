@@ -1,10 +1,11 @@
+import sys
 import pandas as pd
 import numpy as np
-from datetime import timedelta
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 import streamlit as st
 from typing import List, Dict, Union
-import sys
+from datetime import timedelta
 
 # 설정
 np.random.seed(42)
@@ -12,16 +13,20 @@ today = pd.to_datetime("2025-05-26")
 
 # 연락자별 랜덤 연락 기록 생성 (오늘 기준 과거 날짜 생성)
 contacts_logs = {
-    name: sorted(today - pd.to_timedelta(np.random.choice(range(365), size=np.random.randint(10, 40), replace=False), unit='D'))
+    name: sorted(
+        today - pd.to_timedelta(np.random.choice(range(365), size=np.random.randint(10, 40), replace=False), unit='D'))
     for name in ["Alice", "Bob", "Charlie", "David"]
 }
 
 # 한글 폰트 설정 (맑은 고딕)
+font_path = 'NanumGothicEco.ttf'
 if sys.platform == "darwin":
     plt.rcParams['font.family'] = 'AppleGothic'
 else:
-    plt.rcParams["font.family"] = 'NanumGothic'
+    fontprop = fm.FontProperties(fname=font_path)
+    plt.rcParams['font.family'] = fontprop.get_name()
 plt.rcParams['axes.unicode_minus'] = False
+
 
 # alpha 자동 계산 함수 (hybrid)
 def compute_dynamic_alpha(intervals: List[int]) -> float:
@@ -47,6 +52,7 @@ def compute_dynamic_alpha(intervals: List[int]) -> float:
 
     return alpha
 
+
 # Confidence Score 계산 함수
 def compute_confidence(intervals: np.ndarray, ema_history: List[float], gamma: float = 0.9) -> float:
     ema_history = np.array(ema_history)
@@ -55,6 +61,7 @@ def compute_confidence(intervals: np.ndarray, ema_history: List[float], gamma: f
     weighted_error = np.sum(relative_errors * weights) / np.sum(weights)
     confidence = max(0, 1 - weighted_error)
     return confidence
+
 
 # 리마인더 시스템 함수 정의
 def robust_contact_reminder(
@@ -180,6 +187,7 @@ def robust_contact_reminder(
         "EMA History": ema_history,
         "Alpha": round(alpha, 3)
     }
+
 
 # Streamlit 앱 시작
 st.title("📅 연락 리마인더 시스템 (EMA + 특수 이벤트 고려 + Adaptive Alpha + Confidence 개선)")
