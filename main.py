@@ -22,7 +22,7 @@ contacts_logs = {
 if sys.platform == "darwin":
     plt.rcParams['font.family'] = 'AppleGothic'
 else:
-    font_path = 'NanumGothicEco.ttf'
+    font_path = 'fonts/NanumGothic.ttf'
     fontprop = fm.FontProperties(fname=font_path)
     plt.rcParams['font.family'] = fontprop.get_name()
     print(f"Loaded font name: {fontprop.get_name()}")
