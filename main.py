@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import timedelta
 import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
 import streamlit as st
 from typing import List, Dict, Union
 
