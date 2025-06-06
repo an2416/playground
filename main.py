@@ -4,6 +4,7 @@ from datetime import timedelta
 import matplotlib.pyplot as plt
 import streamlit as st
 from typing import List, Dict, Union
+import sys
 
 # 설정
 np.random.seed(42)
@@ -16,7 +17,10 @@ contacts_logs = {
 }
 
 # 한글 폰트 설정 (맑은 고딕)
-plt.rcParams['font.family'] = 'AppleGothic'
+if sys.platform == "darwin":
+    plt.rcParams['font.family'] = 'AppleGothic'
+else:
+    plt.rcParams["font.family"] = 'NanumGothic'
 plt.rcParams['axes.unicode_minus'] = False
 
 # alpha 자동 계산 함수 (hybrid)
