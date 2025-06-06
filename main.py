@@ -7,6 +7,9 @@ import streamlit as st
 from typing import List, Dict, Union
 from datetime import timedelta, date
 
+import matplotlib
+matplotlib.font_manager._rebuild()
+
 # 설정
 np.random.seed(42)
 today = pd.to_datetime(date.today())
