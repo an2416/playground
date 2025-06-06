@@ -7,8 +7,8 @@ import streamlit as st
 from typing import List, Dict, Union
 from datetime import timedelta, date
 
-import matplotlib
-matplotlib.font_manager._rebuild()
+st.cache_data.clear()
+st.cache_resource.clear()
 
 # 설정
 np.random.seed(42)
