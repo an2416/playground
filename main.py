@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import streamlit as st
 from typing import List, Dict, Union
-from datetime import timedelta
+from datetime import timedelta, date
 
 # 설정
 np.random.seed(42)
-today = pd.to_datetime("2025-05-26")
+today = pd.to_datetime(date.today())
 
 # 연락자별 랜덤 연락 기록 생성 (오늘 기준 과거 날짜 생성)
 TOTAL_NUM_OF_CONTACT_DAYS = 365
@@ -195,7 +195,7 @@ def robust_contact_reminder(
 
 
 # Streamlit 앱 시작
-st.title(f"📅 연락 리마인더 시스템 (EMA + 특수 이벤트 고려 + Adaptive Alpha + Confidence 개선) {fontprop.get_name()}")
+st.title(f"📅 연락 리마인더 시스템 (EMA + 특수 이벤트 고려 + Adaptive Alpha + Confidence 개선)")
 
 # 사용자 슬라이더로 sudden_change_threshold 설정 가능
 sudden_change_threshold = st.sidebar.slider("급격한 변화 판정 비율", min_value=0.1, max_value=0.5, value=0.2, step=0.05)
