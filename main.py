@@ -7,8 +7,6 @@ import streamlit as st
 from typing import List, Dict, Union
 from datetime import timedelta, date
 
-st.cache_data.clear()
-st.cache_resource.clear()
 
 # 설정
 np.random.seed(42)
@@ -34,6 +32,10 @@ else:
     plt.rcParams['font.family'] = fontprop.get_name()
     print(f"Loaded font name: {fontprop.get_name()}")
 plt.rcParams['axes.unicode_minus'] = False
+
+font_list = [f.name for f in fm.fontManager.ttflist]
+print("설치된 폰트 목록:", font_list)
+
 
 
 # alpha 자동 계산 함수 (hybrid)
@@ -198,7 +200,7 @@ def robust_contact_reminder(
 
 
 # Streamlit 앱 시작
-st.title(f"📅 연락 리마인더 시스템 (EMA + 특수 이벤트 고려 + Adaptive Alpha + Confidence 개선)")
+st.title(f"📅 연락 리마인더 시스템 (EMA + 특수 이벤트 고려 + Adaptive Alpha + Confidence 개선) {font_list}")
 
 # 사용자 슬라이더로 sudden_change_threshold 설정 가능
 sudden_change_threshold = st.sidebar.slider("급격한 변화 판정 비율", min_value=0.1, max_value=0.5, value=0.2, step=0.05)
