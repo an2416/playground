@@ -1,3 +1,4 @@
+import os
 import sys
 import pandas as pd
 import numpy as np
@@ -7,6 +8,9 @@ import streamlit as st
 from typing import List, Dict, Union
 from datetime import timedelta, date
 
+cache_path = os.path.join(os.path.expanduser("~"), ".matplotlib", "fontlist-v390.json")
+if os.path.exists(cache_path):
+    os.remove(cache_path)
 
 # 설정
 np.random.seed(42)
